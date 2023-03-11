@@ -9,19 +9,19 @@ import java.time.LocalDate;
 @Slf4j
 public class ValidateUser {
 
-    public void validateUser (User user) {
+    public static void validateUser (User user) {
         if (user.getEmail() == null || user.getEmail().isBlank()) {
-            log.info("Поле e-mail не заполнено");
+            log.warn("Поле e-mail не заполнено");
             throw new ValidationException("Ошибка валидации");
         }
 
         if (!user.getEmail().contains("@")) {
-            log.info("Поле e-mail не содержит @");
+            log.warn("Поле e-mail не содержит @");
             throw new ValidationException("Ошибка валидации");
         }
 
         if (user.getLogin() == null || user.getLogin().contains(" ")) {
-            log.info("Поле логин не заполнено или содержит пробелы");
+            log.warn("Поле логин не заполнено или содержит пробелы");
             throw new ValidationException("Ошибка валидации");
         }
 
@@ -30,7 +30,7 @@ public class ValidateUser {
         }
 
         if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.info("Дата рождения указана в будущем");
+            log.warn("Дата рождения указана в будущем");
             throw new ValidationException("Ошибка валидации");
         }
     }

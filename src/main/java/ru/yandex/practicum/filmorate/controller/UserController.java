@@ -8,6 +8,8 @@ import ru.yandex.practicum.filmorate.validations.ValidateUser;
 
 import java.util.*;
 
+import static ru.yandex.practicum.filmorate.validations.ValidateUser.validateUser;
+
 @RestController
 @Slf4j
 @RequestMapping("/users")
@@ -24,12 +26,19 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        new ValidateUser().validateUser(user);
+        validateUser(user);
         String email = user.getEmail();
         for (User user1 : users.values()) {
             if (user1.getEmail().equals(email)) {
-                log.info("Пользователь с таким e-mail уже зарегистрирован");
-                throw new UserAlreadyExistException("Пользователь с таким e-mail уже зарегистрирован");
+                log.warn("Пользователь с {} уже зарегистрирован", email);
+                throw new ValidationException("Пользователь с таким e-mail уже зарегистрирован");
+            }
+        }
+        String login = user.getLogin();
+        for (User userLogin : users.values()) {
+            if (userLogin.getLogin().equals(login)) {
+                log.warn("Пользователь с логином {} уже зарегистрирован", login);
+                throw new ValidationException("Пользователь с таким логином уже зарегистрирован");
             }
         }
         user.setId(idUser);
@@ -41,10 +50,10 @@ public class UserController {
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        new ValidateUser().validateUser(user);
+        validateUser(user);
         if (!users.containsKey(user.getId())) {
-            log.info("Неверный ключ");
-            throw new ValidationException("Неверный ключ");
+            log.warn("Пользователь с id={} не существует.", user.getId());
+            throw new ValidationException("Пользователь с введеным id не существует");
         }
         users.put(user.getId(), user);
         log.info("Обновлен пользователь: '{}'", user);
