@@ -2,19 +2,13 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.apachecommons.CommonsLog;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-
-import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFilm;
 
 @Component
 @RequiredArgsConstructor
@@ -25,18 +19,6 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Getter
     private final Map<Integer, Film> films;
-//    private final Map<Integer, Film> films = new HashMap<>();
-
-/*    public Map<Integer, Film> getFilms() {
-        return films;
-    }*/
-
-/*    public Collection<Film> findAllFilms() {
-        log.info("Получен запрос на получение списка фильмов");
-        Collection<Film> z = films.values();
-        return z;
-    //    return films.values();
-    }*/
 
     @Override
     public Film createFilm(Film film) {
@@ -70,7 +52,6 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Override
     public void deleteFilm(Film film) {
-    //    String name = film.getName();
         if (!films.containsKey(film.getId())) {
             log.warn("Удалить фильм не удалось. Фильм с id {} отсутствует", film.getId());
             throw new NotFoundException(String.format("Фильм с id=\"%s\" не существует.", film.getId()));

@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseBody;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Map;
@@ -57,7 +55,6 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public void deleteUser(User user) {
-    //    String email = user.getEmail();
         if (!users.containsKey(user.getId())) {
             log.warn("Удалить пользователя не удалось. Пользователь с id={} отсутствует", user.getId());
             throw new NotFoundException(String.format("Пользователь с id=\"%s\" не существует.", user.getId()));

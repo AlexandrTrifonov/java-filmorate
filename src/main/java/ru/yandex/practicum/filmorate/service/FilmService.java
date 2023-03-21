@@ -2,19 +2,13 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFilm;
 
 @Service
 @RequiredArgsConstructor
@@ -22,11 +16,6 @@ import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFil
 public class FilmService implements Comparator<Film> {
 
     private final FilmStorage filmStorage;
-
-/*    @Autowired
-    FilmStorage filmStorage;*/
-
-//    private Set<Long> likes = new HashSet<>();
 
     public Collection<Film> findAllFilms() {
         return filmStorage.getFilms().values();
@@ -87,8 +76,4 @@ public class FilmService implements Comparator<Film> {
     public int compare(Film f0, Film f1) {
         return f1.getLikesFilm().size()-(f0.getLikesFilm().size());
     }
-
-    /*    private static Integer getNextId() {
-        return globalId++;
-    }*/
 }

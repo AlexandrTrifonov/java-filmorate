@@ -33,7 +33,6 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-    //    String email = userStorage.getUsers().get(id).getEmail();
         if (!userStorage.getUsers().containsKey(id)) {
             log.warn("Пользователь id={} не зарегистрирован.", id);
             throw new NotFoundException(String.format("Пользователь id=%s не зарегистрирован.", id));
