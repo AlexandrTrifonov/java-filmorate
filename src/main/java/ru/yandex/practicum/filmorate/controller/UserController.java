@@ -72,6 +72,11 @@ public class UserController {
         userService.deleteUser(user);
     }
 
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable (name = "id", required = false) Integer id) {
+        return userService.getUserById(id);
+    }
+
     @PutMapping("/{id}/friends/{friendId}")
     public User addFriendUser(@PathVariable (name = "id", required = false) Integer userId, @PathVariable (required = false) Integer friendId) {
         return userService.addFriendUser(userId, friendId);

@@ -14,6 +14,25 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidation (final ValidationException e) {
+        return Map.of("Ошибка валидации: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleNotFound (final NotFoundException e) {
+        return Map.of("Объект не найден: ", e.getMessage());
+
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleException (final RuntimeException e) {
+        return Map.of("Возникло исключение: ", e.getMessage());
+    }
+
+/*    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidation (final ValidationException e) {
         return String.format("Ошибка валидации: \"%s\".", e.getMessage());
     }
@@ -28,7 +47,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException (final RuntimeException e) {
         return String.format("Возникло исключение: \"%s\".", e.getMessage());
-    }
+    }*/
 
 /*    public ErrorResponse handleIncorrectParameterException(final ValidationException e) {
         return new ErrorResponse(
