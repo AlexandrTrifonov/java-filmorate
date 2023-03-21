@@ -22,13 +22,19 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleNotFound (final NotFoundException e) {
         return Map.of("Объект не найден: ", e.getMessage());
-
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, String> handleException (final RuntimeException e) {
         return Map.of("Возникло исключение: ", e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public Map<String, String> handleException1 (final Exception e) {
+        return Map.of("Возникло исключение: ", "Метод не найден");
+//        return Map.of("Возникло исключение: ", e.getMessage());
     }
 
 /*    @ExceptionHandler

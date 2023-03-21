@@ -48,7 +48,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User updateUser(User user) {
         if (!users.containsKey(user.getId())) {
             log.warn("Пользователь с id={} не существует.", user.getId());
-            throw new NotFoundException(String.format("Пользователь с id=\"%s\" не существует.", user.getId()));
+            throw new NotFoundException(String.format("Пользователь с id=%s не существует.", user.getId()));
         }
         users.put(user.getId(), user);
         log.info("Обновлен пользователь: '{}'", user);

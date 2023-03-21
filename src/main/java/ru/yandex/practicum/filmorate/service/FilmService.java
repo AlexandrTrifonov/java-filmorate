@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
@@ -43,18 +44,37 @@ public class FilmService implements Comparator<Film> {
     }
 
     public Film getFilmById(Integer id) {
+        if (!filmStorage.getFilms().containsKey(id)) {
+            log.warn("Фильм id={} отсутсвует.", id);
+            throw new NotFoundException(String.format("Фильм с id=%s отсутствует.", id));
+        }
         return filmStorage.getFilms().get(id);
     }
 
     public Film addLikeFilm(Integer filmId, Integer userId) {
+        if (!filmStorage.getFilms().containsKey(filmId)) {
+            log.warn("Фильм id={} отсутсвует.", filmId);
+            throw new NotFoundException(String.format("Фильм с id=%s отсутствует.", filmId));
+        }
         getFilmById(filmId).getLikesFilm().add(Long.valueOf(userId));
         log.info("Лайк фильму {} добавил клиент с id {}", getFilmById(filmId).getName(), userId);
         return getFilmById(filmId);
     }
     public Film deleteLikeFilm(Integer filmId, Integer userId) {
-        getFilmById(filmId).getLikesFilm().remove(Long.valueOf(userId));
-        log.info("Лайк фильму {} удалил клиент с id {}", getFilmById(filmId).getName(), userId);
-        return getFilmById(filmId);
+        if (!filmStorage.getFilms().containsKey(filmId)) {
+            log.warn("Фильм id={} отсутсвует.", filmId);
+            throw new NotFoundException(String.format("Фильм с id=%s отсутствует.", filmId));
+        }
+        for (Long userIdLiked : getFilmById(filmId).getLikesFilm()) {
+            if (userIdLiked == Long.valueOf(userId)) {
+                getFilmById(filmId).getLikesFilm().remove(Long.valueOf(userId));
+                log.info("Лайк фильму {} удалил клиент с id {}", getFilmById(filmId).getName(), userId);
+                return getFilmById(filmId);
+            }
+        }
+        log.warn("Лайк пользователя id={} отсутсвует.", userId);
+        throw new NotFoundException(String.format("Лайк пользователя id=%s отсутствует.", userId));
+
     }
     public Collection<Film> getPopularFilms(Integer count) {
         return filmStorage.getFilms().values().stream()

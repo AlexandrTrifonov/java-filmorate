@@ -4,17 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
-import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,10 +33,10 @@ public class UserService {
     }
 
     public User getUserById(Integer id) {
-        String email = userStorage.getUsers().get(id).getEmail();
+    //    String email = userStorage.getUsers().get(id).getEmail();
         if (!userStorage.getUsers().containsKey(id)) {
-            log.warn("Пользователь с {} не зарегистрирован.", email);
-            throw new NotFoundException(String.format("Пользователь с \"%s\" не зарегистрирован.", email));
+            log.warn("Пользователь id={} не зарегистрирован.", id);
+            throw new NotFoundException(String.format("Пользователь id=%s не зарегистрирован.", id));
         }
         return userStorage.getUsers().get(id);
     }
@@ -70,5 +63,19 @@ public class UserService {
             listUser.add(getUserById(Math.toIntExact(idFriends)));
         }
         return listUser;
+    }
+
+    public Collection<User> getCommonFriends(Integer userId, Integer otherId) {
+        Collection<User> listCommonFriends = new ArrayList<>();
+        for (Long idFriends : userStorage.getUsers().get(userId).getFriendsUser()) {
+            for (Long idFriendsOtherUser : userStorage.getUsers().get(otherId).getFriendsUser()) {
+                if (Objects.equals(idFriendsOtherUser, idFriends)) {
+                    listCommonFriends.add(getUserById(Math.toIntExact(idFriends)));
+                    break;
+                }
+            }
+        }
+        log.info("Общие друзья" + listCommonFriends);
+        return listCommonFriends;
     }
 }

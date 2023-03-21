@@ -78,12 +78,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriendUser(@PathVariable (name = "id", required = false) Integer userId, @PathVariable (required = false) Integer friendId) {
+    public User addFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
         return userService.addFriendUser(userId, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFriendUser(@PathVariable (name = "id", required = false) Integer userId, @PathVariable (required = false) Integer friendId) {
+    public User deleteFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
         return userService.deleteFriendUser(userId, friendId);
     }
 
@@ -91,5 +91,11 @@ public class UserController {
     @ResponseBody
     public Collection<User> getFriendsUser(@PathVariable (name = "id", required = false) Integer userId) {
         return userService.getFriendsUser(userId);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    @ResponseBody
+    public Collection<User> getCommonFriends(@PathVariable (name = "id") Integer userId, @PathVariable Integer otherId) {
+        return userService.getCommonFriends(userId, otherId);
     }
 }
