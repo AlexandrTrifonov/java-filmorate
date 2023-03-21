@@ -1,5 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +16,16 @@ import java.util.stream.Collectors;
 import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFilm;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class FilmService implements Comparator<Film> {
 
-    @Autowired
-    FilmStorage filmStorage;
+    private final FilmStorage filmStorage;
 
-    private Set<Long> likes = new HashSet<>();
+/*    @Autowired
+    FilmStorage filmStorage;*/
+
+//    private Set<Long> likes = new HashSet<>();
 
     public Collection<Film> findAllFilms() {
         return filmStorage.getFilms().values();
@@ -28,12 +34,9 @@ public class FilmService implements Comparator<Film> {
         return filmStorage.createFilm(film);
     }
 
-/*    public Collection<Film> findTenMostPopularFilms() {
-        filmStorage.createFilm()
-        System.out.println("10 популярных фильмов");
-//        log.info("Получен запрос на получение списка фильмов");
-        return films.values();
-    }*/
+    public Film updateFilm(Film film) {
+        return filmStorage.updateFilm(film);
+    }
 
     public void deleteFilm(Film film) {
         filmStorage.deleteFilm(film);
@@ -43,15 +46,15 @@ public class FilmService implements Comparator<Film> {
         return filmStorage.getFilms().get(id);
     }
 
-    public Film putLikeFilm(Integer id, Integer userId) {
-        getFilmById(id).getLikesFilm().add(Long.valueOf(userId));
-    //    log.info("Лайк фильму {} добавил клиент с id {}", likedFilm.getName(), userId);
-        return getFilmById(id);
+    public Film addLikeFilm(Integer filmId, Integer userId) {
+        getFilmById(filmId).getLikesFilm().add(Long.valueOf(userId));
+        log.info("Лайк фильму {} добавил клиент с id {}", getFilmById(filmId).getName(), userId);
+        return getFilmById(filmId);
     }
-    public Film deleteLikeFilm(Integer id, Integer userId) {
-        getFilmById(id).getLikesFilm().remove(Long.valueOf(userId));
-        //    log.info("Лайк фильму {} добавил клиент с id {}", likedFilm.getName(), userId);
-        return getFilmById(id);
+    public Film deleteLikeFilm(Integer filmId, Integer userId) {
+        getFilmById(filmId).getLikesFilm().remove(Long.valueOf(userId));
+        log.info("Лайк фильму {} удалил клиент с id {}", getFilmById(filmId).getName(), userId);
+        return getFilmById(filmId);
     }
     public Collection<Film> getPopularFilms(Integer count) {
         return filmStorage.getFilms().values().stream()

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.Map;
 import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFilm;
 
 @RestController
+@RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/films")
 public class FilmController {
@@ -23,12 +25,12 @@ public class FilmController {
 //    private Integer idFilm = 1;
 //    private final Map<Integer, Film> films = new HashMap<>();
 
-    @Autowired
-    FilmService filmService;
+/*    @Autowired
+    FilmService filmService;*/
+    private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> findAllFilms() {
-//        log.info("Получен запрос на получение списка фильмов");
         return filmService.findAllFilms();
     }
 
@@ -45,18 +47,17 @@ public class FilmController {
         return filmService.createFilm(film);
     }
 
-/*    @PutMapping
+    @PutMapping
     public Film updateFilm(@RequestBody Film film) {
         validateFilm(film);
-        if (!films.containsKey(film.getId())) {
+    /*    if (!films.containsKey(film.getId())) {
             log.warn("Фильм с id={} не существует.", film.getId());
             throw new ValidationException("Фильм с введеным id не существует");
         }
         films.put(film.getId(), film);
-        log.info("Обновлен фильм: '{}'", film);
-        return film;
-    }*/
-
+        log.info("Обновлен фильм: '{}'", film);*/
+        return filmService.updateFilm(film);
+    }
     @DeleteMapping
     public void deleteFilm(@RequestBody Film film) {
         filmService.deleteFilm(film);
@@ -67,8 +68,8 @@ public class FilmController {
         return filmService.getFilmById(id);
     }
     @PutMapping("/{id}/like/{userId}")
-    public Film putLikeFilm(@PathVariable (required = false) Integer id, @PathVariable (required = false) Integer userId) {
-        return filmService.putLikeFilm(id, userId);
+    public Film addLikeFilm(@PathVariable (name = "id", required = false) Integer filmId, @PathVariable (required = false) Integer userId) {
+        return filmService.addLikeFilm(filmId, userId);
     }
     @DeleteMapping("/{id}/like/{userId}")
     public Film deleteLikeFilm(@PathVariable (required = false) Integer id, @PathVariable (required = false) Integer userId) {
