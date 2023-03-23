@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}/friends")
-    @ResponseBody
+ //   @ResponseBody
     public Collection<User> getFriendsUser(@PathVariable (name = "id", required = false) Integer userId) {
         return userService.getFriendsUser(userId);
     }
