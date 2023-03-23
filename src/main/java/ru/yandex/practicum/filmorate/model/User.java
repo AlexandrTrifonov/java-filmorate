@@ -11,8 +11,6 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-// @RequiredArgsConstructor
-@NoArgsConstructor
 public class User {
 
     private Integer id;
@@ -20,13 +18,5 @@ public class User {
     private String login;
     private String name;
     private LocalDate birthday;
-    private Set<Long> friendsUser = new HashSet<>();
-
-/*    public User (String email, String login, String name, LocalDate birthday) {
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
-        friendsUser = new HashSet<>();
-    }*/
+    private final Set<Long> friendsUser = new HashSet<>();
 }

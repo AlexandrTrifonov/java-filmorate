@@ -8,8 +8,6 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-// @RequiredArgsConstructor
-@NoArgsConstructor
 public class Film {
 
     private Integer id;
@@ -17,13 +15,5 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private int duration;
-    private Set<Long> likesFilm = new HashSet<>();
-
-/*    public Film (String name, String description, LocalDate releaseDate, int duration) {
-        this.name = name;
-        this.description = description;
-        this.releaseDate = releaseDate;
-        this.duration = duration;
-        likesFilm = new HashSet<>();
-    }*/
+    private final Set<Long> likesFilm = new HashSet<>();
 }
