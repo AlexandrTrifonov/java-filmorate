@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
 
-import static ru.yandex.practicum.filmorate.validations.ValidateFilm.validateFilm;
+import static ru.yandex.practicum.filmorate.service.ValidateFilm.validateFilm;
 
 @RestController
 @RequiredArgsConstructor

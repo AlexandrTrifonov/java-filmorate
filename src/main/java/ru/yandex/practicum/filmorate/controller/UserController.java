@@ -8,7 +8,7 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.*;
 
-import static ru.yandex.practicum.filmorate.validations.ValidateUser.validateUser;
+import static ru.yandex.practicum.filmorate.service.ValidateUser.validateUser;
 
 @RestController
 @RequiredArgsConstructor
