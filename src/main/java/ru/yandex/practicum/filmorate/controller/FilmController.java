@@ -25,13 +25,13 @@ public class FilmController {
 
     @PostMapping
     public Film createFilm(@RequestBody Film film) {
-        validateFilm(film);
+//        validateFilm(film);
         return filmService.createFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
-        validateFilm(film);
+//        validateFilm(film);
         return filmService.updateFilm(film);
     }
     @DeleteMapping

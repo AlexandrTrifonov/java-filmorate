@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ru.yandex.practicum.filmorate.service.ValidateFilm.validateFilm;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -23,10 +25,12 @@ public class FilmService implements Comparator<Film> {
         return filmStorage.getFilms().values();
     }
     public Film createFilm(Film film) {
+        validateFilm(film);
         return filmStorage.createFilm(film);
     }
 
     public Film updateFilm(Film film) {
+        validateFilm(film);
         return filmStorage.updateFilm(film);
     }
 
