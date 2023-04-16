@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +29,7 @@ public class FilmController {
     public Film updateFilm(@RequestBody Film film) {
         return filmService.updateFilm(film);
     }
+
     @DeleteMapping
     public void deleteFilm(@RequestBody Film film) {
         filmService.deleteFilm(film);
@@ -45,6 +45,7 @@ public class FilmController {
                             @PathVariable (required = false) Integer userId) {
         filmService.addLikeFilm(filmId, userId);
     }
+
     @DeleteMapping("/{id}/like/{userId}")
     public void deleteLikeFilm(@PathVariable (required = false) Integer id,
                                @PathVariable (required = false) Integer userId) {
