@@ -41,7 +41,7 @@ public class InMemoryUserStorage implements UserStorage {
         user.setId(idUser);
         users.put(user.getId(), user);
         log.info("Добавлен пользователь: '{}'", user);
-        this.idUser ++;
+        this.idUser++;
         return user;
     }
 
