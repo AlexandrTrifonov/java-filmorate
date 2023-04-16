@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.dao.MpaStorage;
-import ru.yandex.practicum.filmorate.storage.dao.makeMpa;
+import ru.yandex.practicum.filmorate.storage.dao.MakeMpa;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +24,7 @@ public class MpaDbStorage implements MpaStorage {
     @Override
     public Collection<Mpa> getMpa() {
         String sqlQuery = "select * from mpa order by mpa_id";
-        List<Mpa> mpa = jdbcTemplate.query(sqlQuery, new makeMpa());
+        List<Mpa> mpa = jdbcTemplate.query(sqlQuery, new MakeMpa());
         log.info("Получен список MPA");
         return mpa;
     }
@@ -34,7 +34,7 @@ public class MpaDbStorage implements MpaStorage {
         try {
             String query = "select * from mpa where mpa_id = ?";
             log.info("Получен MPA по id={}", id);
-            return jdbcTemplate.queryForObject(query, new makeMpa(), id);
+            return jdbcTemplate.queryForObject(query, new MakeMpa(), id);
         } catch (DataAccessException e) {
             log.warn("Ошибка Mpa");
             return null;

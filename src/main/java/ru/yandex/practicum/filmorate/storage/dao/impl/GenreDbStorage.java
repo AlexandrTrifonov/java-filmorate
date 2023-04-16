@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreStorage;
-import ru.yandex.practicum.filmorate.storage.dao.makeGenre;
+import ru.yandex.practicum.filmorate.storage.dao.MakeGenre;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +24,7 @@ public class GenreDbStorage implements GenreStorage {
     @Override
     public Collection<Genre> getGenres() {
         String sqlQuery = "select * from genre order by genre_id";
-        List<Genre> genres = jdbcTemplate.query(sqlQuery, new makeGenre());
+        List<Genre> genres = jdbcTemplate.query(sqlQuery, new MakeGenre());
         log.info("Получен список жанров");
         return genres;
     }
@@ -34,7 +34,7 @@ public class GenreDbStorage implements GenreStorage {
         try {
             String query = "select * from genre where genre_id = ?";
             log.info("Получен жанр по id={}", id);
-            return jdbcTemplate.queryForObject(query, new makeGenre(), id);
+            return jdbcTemplate.queryForObject(query, new MakeGenre(), id);
         } catch (DataAccessException e) {
             log.warn("Ошибка жанра");
             return null;

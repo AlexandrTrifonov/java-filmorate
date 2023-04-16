@@ -12,9 +12,9 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.dao.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.dao.makeFilm;
-import ru.yandex.practicum.filmorate.storage.dao.makeGenre;
-import ru.yandex.practicum.filmorate.storage.dao.makeMpa;
+import ru.yandex.practicum.filmorate.storage.dao.MakeFilm;
+import ru.yandex.practicum.filmorate.storage.dao.MakeGenre;
+import ru.yandex.practicum.filmorate.storage.dao.MakeMpa;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -122,7 +122,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Collection<Film> findAllFilms() {
         String sqlQuery = "select * from films";
-        List<Film> films = jdbcTemplate.query(sqlQuery, new makeFilm());
+        List<Film> films = jdbcTemplate.query(sqlQuery, new MakeFilm());
         addMpaNameToFilms(films);
         addLikesToFilms(films);
         addGenresToFilms(films);
@@ -133,7 +133,7 @@ public class FilmDbStorage implements FilmStorage {
     private void addMpaNameToFilms(List<Film> films) {
         for (Film film : films) {
             String query = "select * from mpa where mpa_id IN (select mpa_id from films where film_id = ?)";
-            Mpa mpa = jdbcTemplate.queryForObject(query, new makeMpa(), film.getId());
+            Mpa mpa = jdbcTemplate.queryForObject(query, new MakeMpa(), film.getId());
             film.setMpa(mpa);
         }
         log.info("Добавлены лайки с списку фильмов");
@@ -142,7 +142,7 @@ public class FilmDbStorage implements FilmStorage {
     private void addGenresToFilms(List<Film> films) {
         for (Film film : films) {
             String query = "select * from genre where genre_id IN (select genre_id from film_genre where film_id = ?)";
-            List<Genre> genre = jdbcTemplate.query(query, new makeGenre(), film.getId());
+            List<Genre> genre = jdbcTemplate.query(query, new MakeGenre(), film.getId());
 
             Set<Genre> set = new HashSet<>(genre);
             film.setGenres(set);
@@ -164,15 +164,15 @@ public class FilmDbStorage implements FilmStorage {
     public Film getFilmById(Integer id) {
         try {
             String query = "select * from films where film_id = ?";
-            Film film = jdbcTemplate.queryForObject(query, new makeFilm(), id);
+            Film film = jdbcTemplate.queryForObject(query, new MakeFilm(), id);
 
             String queryMpa = "select * from mpa where mpa_id IN (select mpa_id from films where film_id = ?)";
-            Mpa mpa = jdbcTemplate.queryForObject(queryMpa, new makeMpa(), id);
+            Mpa mpa = jdbcTemplate.queryForObject(queryMpa, new MakeMpa(), id);
             assert film != null;
             film.setMpa(mpa);
 
             String queryGenres = "select * from genre where genre_id IN (select genre_id from film_genre where film_id = ?)";
-            List<Genre> genres = jdbcTemplate.query(queryGenres, new makeGenre(), id);
+            List<Genre> genres = jdbcTemplate.query(queryGenres, new MakeGenre(), id);
 
             Set<Genre> set = new HashSet<>(genres);
             film.setGenres(set);

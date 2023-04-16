@@ -95,7 +95,7 @@ public class UserDbStorage implements UserStorage {
     @Override
     public Collection<User> findAllUsers() {
         String query = "SELECT * FROM users";
-        List<User> users = jdbcTemplate.query(query, new makeUser());
+        List<User> users = jdbcTemplate.query(query, new MakeUser());
         addFriendsToUsers(users);
         log.info("Получен список пользователей");
         return users;
@@ -116,7 +116,7 @@ public class UserDbStorage implements UserStorage {
 
         try {
             String query = "SELECT * FROM users WHERE user_id = ?";
-            User user = jdbcTemplate.queryForObject(query, new makeUser(), id);
+            User user = jdbcTemplate.queryForObject(query, new MakeUser(), id);
 
             Set<Integer> friendsUser = addFriendsUser(id);
             assert user != null;
@@ -150,7 +150,7 @@ public class UserDbStorage implements UserStorage {
 
     public Collection<User> getFriendsUser(Integer id) {
         String query = "SELECT * FROM users WHERE user_id IN (SELECT friends_id FROM friends_user WHERE user_id = ?)";
-        List<User> friends = jdbcTemplate.query(query, new makeUser(), id);
+        List<User> friends = jdbcTemplate.query(query, new MakeUser(), id);
         List<User> friendsReturn = new ArrayList<>();
         for (User user : friends) {
             Integer idUser = user.getId();
