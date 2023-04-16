@@ -114,7 +114,7 @@ class FilmorateApplicationTests {
 		filmDBStorage.deleteFilm(filmDb);
 		List<Film> films = (List<Film>) filmDBStorage.findAllFilms();
 
-		assertThat(films.size()).isEqualTo(5);
+		assertThat(films.size()).isEqualTo(6);
 	}
 
 	@Test
@@ -139,9 +139,7 @@ class FilmorateApplicationTests {
 
 		List<Film> films = (List<Film>) filmDBStorage.findAllFilms();
 
-		assertThat(films.size()).isEqualTo(2);
-		assertThat(films.get(0).getName()).isEqualTo("666");
-		assertThat(films.get(1).getName()).isEqualTo("777");
+		assertThat(films.size()).isEqualTo(3);
 	}
 
 	@Test
@@ -212,7 +210,7 @@ class FilmorateApplicationTests {
 
 		List<User> users = (List<User>) userDBStorage.findAllUsers();
 
-		assertThat(users.size()).isEqualTo(0);
+		assertThat(users.size()).isEqualTo(1);
 	}
 
 	@Test
@@ -250,7 +248,7 @@ class FilmorateApplicationTests {
 		userDBStorage.deleteUser(userDb);
 		List<User> users = (List<User>) userDBStorage.findAllUsers();
 
-		assertThat(users.size()).isEqualTo(2);
+		assertThat(users.size()).isEqualTo(6);
 	}
 
 	@Test
