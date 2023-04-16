@@ -9,8 +9,6 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
 
-import static ru.yandex.practicum.filmorate.service.ValidateFilm.validateFilm;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -25,31 +23,34 @@ public class FilmController {
 
     @PostMapping
     public Film createFilm(@RequestBody Film film) {
-//        validateFilm(film);
         return filmService.createFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@RequestBody Film film) {
-//        validateFilm(film);
         return filmService.updateFilm(film);
     }
     @DeleteMapping
     public void deleteFilm(@RequestBody Film film) {
         filmService.deleteFilm(film);
     }
+
     @GetMapping("/{id}")
     public Film getFilmById(@PathVariable (name = "id", required = false) Integer id) {
         return filmService.getFilmById(id);
     }
+
     @PutMapping("/{id}/like/{userId}")
-    public Film addLikeFilm(@PathVariable (name = "id", required = false) Integer filmId, @PathVariable (required = false) Integer userId) {
-        return filmService.addLikeFilm(filmId, userId);
+    public void addLikeFilm(@PathVariable (name = "id", required = false) Integer filmId,
+                            @PathVariable (required = false) Integer userId) {
+        filmService.addLikeFilm(filmId, userId);
     }
     @DeleteMapping("/{id}/like/{userId}")
-    public Film deleteLikeFilm(@PathVariable (required = false) Integer id, @PathVariable (required = false) Integer userId) {
-        return filmService.deleteLikeFilm(id, userId);
+    public void deleteLikeFilm(@PathVariable (required = false) Integer id,
+                               @PathVariable (required = false) Integer userId) {
+        filmService.deleteLikeFilm(id, userId);
     }
+
     @GetMapping("/popular")
     @ResponseBody
     public Collection<Film> getPopularFilms(@RequestParam (name = "count", required = false, defaultValue = "10") Integer count) {

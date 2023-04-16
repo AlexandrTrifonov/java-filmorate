@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.user;
+package ru.yandex.practicum.filmorate.storage.dao.impl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.dao.UserStorage;
 
+import java.util.Collection;
 import java.util.Map;
 
 @Component
@@ -66,5 +69,15 @@ public class InMemoryUserStorage implements UserStorage {
                 break;
             }
         }
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User getUserById(Integer id) {
+        return null;
     }
 }

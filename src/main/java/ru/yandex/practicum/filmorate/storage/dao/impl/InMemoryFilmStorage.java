@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.film;
+package ru.yandex.practicum.filmorate.storage.dao.impl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,13 +7,17 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.dao.FilmStorage;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
 
     private Integer idFilm = 1;
 
@@ -63,5 +67,20 @@ public class InMemoryFilmStorage implements FilmStorage{
                 break;
             }
         }
+    }
+
+    @Override
+    public Film getFilmById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public Collection<Film> getPopularFilms(Integer count) {
+        return null;
+    }
+
+    @Override
+    public Collection<Film> findAllFilms() {
+        return null;
     }
 }

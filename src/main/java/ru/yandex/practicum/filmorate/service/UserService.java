@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
+import ru.yandex.practicum.filmorate.storage.dao.UserStorage;
+import ru.yandex.practicum.filmorate.storage.dao.impl.UserDbStorage;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static ru.yandex.practicum.filmorate.service.ValidateUser.validateUser;
@@ -16,71 +19,112 @@ import static ru.yandex.practicum.filmorate.service.ValidateUser.validateUser;
 @Slf4j
 public class UserService {
 
-    private final UserStorage userStorage;
+    private final UserDbStorage userDbStorage;
 
     public Collection<User> findAllUsers() {
-        return userStorage.getUsers().values();
+        return userDbStorage.findAllUsers();
     }
 
     public User createUser(User user) {
         validateUser(user);
-        return userStorage.createUser(user);
+        return userDbStorage.createUser(user);
     }
 
     public User updateUser(User user) {
+        User userCheck = userDbStorage.getUserById(user.getId());
+        if (userCheck == null) {
+            log.warn("Ошибка при добавлении в друзья");
+            NotFoundException.throwException("Ошибка при добавлении в друзья", user.getId());
+        }
         validateUser(user);
-        return userStorage.updateUser(user);
+        return userDbStorage.updateUser(user);
     }
 
     public void deleteUser(User user) {
-        userStorage.deleteUser(user);
-    }
-
-    public User getUserById(Integer id) {
-        if (!userStorage.getUsers().containsKey(id)) {
-            log.warn("Пользователь id={} не зарегистрирован.", id);
-            throw new NotFoundException(String.format("Пользователь id=%s не зарегистрирован.", id));
+        User userCheck = userDbStorage.getUserById(user.getId());
+        if (userCheck == null) {
+            log.warn("Ошибка при добавлении в друзья");
+            NotFoundException.throwException("Ошибка при добавлении в друзья", user.getId());
         }
-        return userStorage.getUsers().get(id);
+        userDbStorage.deleteUser(user);
     }
 
-    public User addFriendUser(Integer userId, Integer friendId) {
-        final User user = getUserById(userId);
-        final User userFriend = getUserById(friendId);
-        user.getFriendsUser().add(Long.valueOf(friendId));
-        userFriend.getFriendsUser().add(Long.valueOf(userId)); // добавление данного пользователя к друзьям его друга
-        log.info("Пользователь {} добавил пользователя {} в друзья", user.getName(), userFriend.getName());
+    public User getUserById(Integer id)  {
+        User user = userDbStorage.getUserById(id);
+        if (user == null) {
+            log.warn("Ошибка при получении пользователя с id={}", id);
+            NotFoundException.throwException("Ошибка при получении пользователя", id);
+        }
         return user;
     }
 
-    public User deleteFriendUser(Integer userId, Integer friendId) {
-        final User user = getUserById(userId);
-        final User userFriend = getUserById(friendId);
-        user.getFriendsUser().remove(Long.valueOf(friendId));
-        userFriend.getFriendsUser().remove(Long.valueOf(userId)); // удаление данного пользователя из друзей его друга
-        log.info("Пользователь {} удалил пользователя {} из друзей", user.getName(), userFriend.getName());
-        return user;
+    public void addFriendUser(Integer userId, Integer friendId)   {
+        if (userId == friendId) {
+            log.warn("userId совпадает с friendId");
+            throw new ValidationException("Попытка добавить самого себя в друзья");
+        }
+        User user = userDbStorage.getUserById(userId);
+        User friend = userDbStorage.getUserById(friendId);
+        if (user == null) {
+            log.warn("Ошибка при добавлении в друзья");
+            NotFoundException.throwException("Ошибка при добавлении в друзья", userId);
+        }
+        if (friend == null) {
+            log.warn("Ошибка при добавлении в друзья");
+            NotFoundException.throwException("Ошибка при добавлении в друзья", userId);
+        }
+        userDbStorage.addFriendUser(userId, friendId);
     }
 
-    public Collection<User> getFriendsUser(Integer userId) {
-        Collection<User> listUser = new ArrayList<>();
- //       for (Long idFriends : userStorage.getUsers().get(userId).getFriendsUser()) {
-        for (Long idFriends : getUserById(userId).getFriendsUser()) {
-                listUser.add(getUserById(Math.toIntExact(idFriends)));
+    public void deleteFriendUser(Integer userId, Integer friendId)   {
+        User user = userDbStorage.getUserById(userId);
+        User friend = userDbStorage.getUserById(friendId);
+        if (user == null) {
+            log.warn("Ошибка при удалении из друзей");
+            NotFoundException.throwException("Ошибка при удалении из друзей", userId);
         }
-        return listUser;
+        if (friend == null) {
+            log.warn("Ошибка при удалении из друзей");
+            NotFoundException.throwException("Ошибка при удалении из друзей", userId);
+        }
+        userDbStorage.deleteFriendUser(userId, friendId);
     }
 
-    public Collection<User> getCommonFriends(Integer userId, Integer otherId) {
-        Collection<User> listCommonFriends = new ArrayList<>();
-        final Set<Long> userFriendsId = getUserById(userId).getFriendsUser();
-        final Set<Long> otherUserFriendsId = getUserById(otherId).getFriendsUser();
-        final Set<Long> listCommonFriendsId = new HashSet<>(userFriendsId);
-        listCommonFriendsId.retainAll(otherUserFriendsId);
-        for (Long idFriends : listCommonFriendsId) {
-            listCommonFriends.add(getUserById(Math.toIntExact(idFriends)));
+    public Collection<User> getFriendsUser(Integer userId)   {
+        User userCheck = userDbStorage.getUserById(userId);
+        if (userCheck == null) {
+            log.warn("Ошибка получения списка друзей пользователя {}", userId);
+            NotFoundException.throwException("Ошибка получения списка друзей пользователя", userId);
         }
-        log.info("Общие друзья" + listCommonFriends);
-        return listCommonFriends;
+        return userDbStorage.getFriendsUser(userId);
+    }
+
+    public List<User> getCommonFriends(Integer userId, Integer otherId) {
+        User user = userDbStorage.getUserById(userId);
+        User other = userDbStorage.getUserById(otherId);
+
+        if (user == null) {
+            log.warn("Ошибка при получении пользователя с id={}", userId);
+            NotFoundException.throwException("Ошибка при получении пользователя", userId);
+        }
+        if (other == null) {
+            log.warn("Ошибка при получении пользователя с id={}", otherId);
+            NotFoundException.throwException("Ошибка при получении пользователя", otherId);
+        }
+
+        Set<Integer> userFriends = user.getFriendsUser();
+        Set<Integer> otherFriends = other.getFriendsUser();
+
+        final List<User> commonFriends = new ArrayList<>();
+        if (userFriends == null || otherFriends == null) {
+            return commonFriends;
+        }
+
+        userFriends.stream()
+                .filter(otherFriends::contains)
+                .sorted()
+                .map(userDbStorage::getUserById)
+                .forEach(commonFriends::add);
+        return commonFriends;
     }
 }

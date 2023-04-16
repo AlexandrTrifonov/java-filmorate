@@ -4,20 +4,19 @@
 #### *Таблицы с Данными*
 - **films** список фильмов
 - **mpa** рейтинг Ассоциации кинокомпаний
-- **filmGenre** связь фильмов с жанрами
+- **film_genre** связь фильмов с жанрами
 - **genre** список жанров фильмов
-- **likesFilm** лайки пользователей
+- **likes_film** лайки пользователей
 - **users** список пользователей
-- **friendsUser** связь дружбы пользователей
+- **friends_user** связь дружбы пользователей
 #### *Примеры SLQ-запросов*
 -     Список всех фильмов
-       - SELECT name FROM films;
+       - SELECT * FROM films;
 -     Список всех пользователей
        - SELECT name FROM users;
 -     Список 10 наиболее популярных фильмов
-       - SELECT name FROM films WHERE id IN (
-           SELECT film_id FROM likesFilm
-           GROUP BY film_id
-           ORDER BY COUNT(user_id) DESC
-           LIMIT 10
-         );
+       - SELECT f.FILM_ID, f.NAME, COUNT(user_id) likes
+          FROM FILMS f
+          LEFT JOIN LIKES_FILM lf ON f.FILM_ID = lf.FILM_ID
+          GROUP BY f.FILM_ID
+          ORDER BY likes DESC LIMIT 10;
