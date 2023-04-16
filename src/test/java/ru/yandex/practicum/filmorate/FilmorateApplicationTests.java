@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,7 +14,6 @@ import ru.yandex.practicum.filmorate.storage.dao.impl.*;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,9 +23,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FilmoRateApplicationTests {
 
 	private final UserDbStorage userDBStorage;
+
 	private final FilmDbStorage filmDBStorage;
+
 	private final GenreDbStorage genreDbStorage;
+
 	private final MpaDbStorage mpaDbStorage;
+
 	private final LikeFilmDbStorage likeFilmDbStorage;
 
 	@Test
@@ -35,17 +37,20 @@ class FilmoRateApplicationTests {
 		Collection<Genre> genres = genreDbStorage.getGenres();
 		assertThat(genres.size()).isEqualTo(6);
 	}
+
 	@Test
 	void testGetGenreById() {
 		Genre genres = genreDbStorage.getGenreById(1);
 		assertThat(genres.getId()).isEqualTo(1);
 		assertThat(genres.getName()).isEqualTo("Комедия");
 	}
+
 	@Test
 	void testGetMpa() {
 		Collection<Mpa> mpa = mpaDbStorage.getMpa();
 		assertThat(mpa.size()).isEqualTo(5);
 	}
+
 	@Test
 	void testGetMpaById() {
 		Mpa mpa = mpaDbStorage.getMpaById(1);
@@ -68,6 +73,7 @@ class FilmoRateApplicationTests {
 		Film filmTest = filmDBStorage.getFilmById(id);
 		assertThat(filmTest.getName()).isEqualTo("222");
 	}
+
 	@Test
 	void testUpdateFilm() {
 		Mpa mpa = new Mpa(1, "G");
@@ -154,6 +160,7 @@ class FilmoRateApplicationTests {
 		assertThat(filmTest.getName()).isEqualTo("888");
 		assertThat(filmTest.getDescription()).isEqualTo("Фильм известного режиссера Рязанова ..");
 	}
+
 	@Test
 	void testAddAndDeleteLikeFilm() {
 
@@ -185,6 +192,7 @@ class FilmoRateApplicationTests {
 
 		assertThat(filmTest1.getLikesFilm().size()).isEqualTo(0);
 	}
+
 	@Test
 	void testCreateUser() {
 		User user = User.builder()
@@ -244,6 +252,7 @@ class FilmoRateApplicationTests {
 
 		assertThat(users.size()).isEqualTo(2);
 	}
+
 	@Test
 	void testGetUserById() {
 
@@ -298,12 +307,3 @@ class FilmoRateApplicationTests {
 
 	}
 }
-
-/*@SpringBootTest
-class FilmorateApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}*/
