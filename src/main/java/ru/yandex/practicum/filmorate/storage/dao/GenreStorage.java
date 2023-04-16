@@ -6,9 +6,9 @@ import java.util.Collection;
 
 public interface GenreStorage {
 
-    public Collection<Genre> getGenres();
+    Collection<Genre> getGenres();
 
-    public Genre getGenreById(Integer id);
+    Genre getGenreById(Integer id);
 
 }
 
