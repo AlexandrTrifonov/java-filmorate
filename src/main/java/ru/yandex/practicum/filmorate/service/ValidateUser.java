@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Slf4j
 public class ValidateUser {
 
-    public static void validateUser (User user) {
+    public static void validateUser(User user) {
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             log.warn("Поле e-mail не заполнено");
             throw new ValidationException("Поле e-mail не заполнено");

@@ -49,7 +49,7 @@ public class FilmService {
         filmDbStorage.deleteFilm(film);
     }
 
-    public Collection<Film> findAllFilms () {
+    public Collection<Film> findAllFilms() {
         return filmDbStorage.findAllFilms();
     }
 
@@ -65,6 +65,7 @@ public class FilmService {
     public Collection<Film> getPopularFilms(Integer count) {
         return filmDbStorage.getPopularFilms(count);
     }
+
     public void addLikeFilm(Integer filmId, Integer userId) {
         Film filmCheck = filmDbStorage.getFilmById(filmId);
         if (filmCheck == null) {
