@@ -8,11 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class makeFilm implements RowMapper<Film> {
+
     @Override
     public Film mapRow(ResultSet rs, int rowNum) throws SQLException {
         Mpa mpaFilm = new Mpa();
         mpaFilm.setId(rs.getInt("mpa_id"));
-    //    Integer filmId = rs.getInt("film_id");
         Film film = Film.builder()
                 .id(rs.getInt("film_id"))
                 .name(rs.getString("name"))
