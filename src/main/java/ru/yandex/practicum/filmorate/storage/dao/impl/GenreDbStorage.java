@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.storage.dao.GenreStorage;
-import ru.yandex.practicum.filmorate.storage.dao.MpaStorage;
 import ru.yandex.practicum.filmorate.storage.dao.makeGenre;
 
 import java.util.Collection;
