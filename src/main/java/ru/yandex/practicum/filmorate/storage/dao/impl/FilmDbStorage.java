@@ -130,7 +130,7 @@ public class FilmDbStorage implements FilmStorage {
         return films;
     }
 
-    private void addMpaNameToFilms (List<Film> films) {
+    private void addMpaNameToFilms(List<Film> films) {
         for (Film film : films) {
             String query = "select * from mpa where mpa_id IN (select mpa_id from films where film_id = ?)";
             Mpa mpa = jdbcTemplate.queryForObject(query, new makeMpa(), film.getId());
@@ -139,7 +139,7 @@ public class FilmDbStorage implements FilmStorage {
         log.info("Добавлены лайки с списку фильмов");
     }
 
-    private void addGenresToFilms (List<Film> films) {
+    private void addGenresToFilms(List<Film> films) {
         for (Film film : films) {
             String query = "select * from genre where genre_id IN (select genre_id from film_genre where film_id = ?)";
             List<Genre> genre = jdbcTemplate.query(query, new makeGenre(), film.getId());
@@ -150,7 +150,7 @@ public class FilmDbStorage implements FilmStorage {
         log.info("Добавлены жанры к списку фильмов");
     }
 
-    private void addLikesToFilms (List<Film> films) {
+    private void addLikesToFilms(List<Film> films) {
         for (Film film : films) {
             String queryLikesFilm = "select user_id from likes_film where film_id = ?";
             List<Integer> usersId = jdbcTemplate.queryForList(queryLikesFilm, Integer.class, film.getId());

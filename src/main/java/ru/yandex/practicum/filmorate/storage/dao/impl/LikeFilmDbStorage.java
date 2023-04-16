@@ -29,13 +29,4 @@ public class LikeFilmDbStorage implements LikeFilmStorage {
         jdbcTemplate.update(query, filmId, userId);
         log.info("У фильма с id={} удален Лайк пользователя с id={}", filmId, userId);
     }
-
-/*    @Override
-    public Set<Integer> userLikeByFilmId(Integer filmId) {
-        String query = "SELECT user_id FROM likes_film WHERE film_id = ?";
-        List<Integer> usersId = jdbcTemplate.queryForList(query, Integer.class, filmId);
-        Set<Integer> likesFilm = new HashSet<>(usersId);
-        log.info("Найдены все Like для фильма id '{}'", filmId);
-        return likesFilm;
-    }*/
 }

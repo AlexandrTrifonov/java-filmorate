@@ -101,7 +101,7 @@ public class UserDbStorage implements UserStorage {
         return users;
     }
 
-    private void addFriendsToUsers (List<User> users) {
+    private void addFriendsToUsers(List<User> users) {
         for (User user : users) {
             String query = "SELECT friends_id FROM friends_user WHERE user_id = ?";
             List<Integer> friendsId = jdbcTemplate.queryForList(query, Integer.class, user.getId());
@@ -110,6 +110,7 @@ public class UserDbStorage implements UserStorage {
         }
         log.info("Добавлены друзья с списку пользователей");
     }
+
     @Override
     public User getUserById(Integer id) {
 
@@ -161,5 +162,4 @@ public class UserDbStorage implements UserStorage {
         log.info("Получен список друзей пользователя с id={}", id);
         return friendsReturn;
     }
-
 }

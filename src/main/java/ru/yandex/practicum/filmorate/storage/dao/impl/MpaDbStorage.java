@@ -28,13 +28,12 @@ public class MpaDbStorage implements MpaStorage {
         log.info("Получен список MPA");
         return mpa;
     }
+
     @Override
     public Mpa getMpaById(Integer id) {
         try {
             String query = "select * from mpa where mpa_id = ?";
-            //  Mpa mpa = jdbcTemplate.queryForObject(query, new makeMpa(), id);
             log.info("Получен MPA по id={}", id);
-            //  return mpa;
             return jdbcTemplate.queryForObject(query, new makeMpa(), id);
         } catch (DataAccessException e) {
             log.warn("Ошибка Mpa");
