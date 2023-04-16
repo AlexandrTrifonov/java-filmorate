@@ -28,6 +28,7 @@ public class GenreDbStorage implements GenreStorage {
         log.info("Получен список жанров");
         return genres;
     }
+
     @Override
     public Genre getGenreById(Integer id) {
         try {
