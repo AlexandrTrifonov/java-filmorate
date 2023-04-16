@@ -189,6 +189,7 @@ public class FilmDbStorage implements FilmStorage {
             return null;
         }
     }
+
     @Override
     public Collection<Film> getPopularFilms(Integer count) {
         Collection<Film> films = this.findAllFilms();
