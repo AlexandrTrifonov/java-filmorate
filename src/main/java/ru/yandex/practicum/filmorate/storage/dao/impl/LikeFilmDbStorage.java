@@ -29,4 +29,5 @@ public class LikeFilmDbStorage implements LikeFilmStorage {
         jdbcTemplate.update(query, filmId, userId);
         log.info("У фильма с id={} удален Лайк пользователя с id={}", filmId, userId);
     }
+
 }

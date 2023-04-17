@@ -10,11 +10,9 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.dao.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.dao.MakeFilm;
 import ru.yandex.practicum.filmorate.storage.dao.MakeGenre;
-import ru.yandex.practicum.filmorate.storage.dao.MakeMpa;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -121,22 +119,13 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Collection<Film> findAllFilms() {
-        String sqlQuery = "select * from films";
-        List<Film> films = jdbcTemplate.query(sqlQuery, new MakeFilm());
-        addMpaNameToFilms(films);
+        String query = "SELECT m.name AS mpa_name, m.mpa_id, f.film_id, f.name, f.description, f.release_date, f.duration, " +
+                "f.mpa_id FROM films AS f INNER JOIN mpa AS m ON f.mpa_id = m.mpa_id";
+        List <Film> films = jdbcTemplate.query(query, new MakeFilm());
         addLikesToFilms(films);
         addGenresToFilms(films);
         log.info("Получен список фильмов");
         return films;
-    }
-
-    private void addMpaNameToFilms(List<Film> films) {
-        for (Film film : films) {
-            String query = "select * from mpa where mpa_id IN (select mpa_id from films where film_id = ?)";
-            Mpa mpa = jdbcTemplate.queryForObject(query, new MakeMpa(), film.getId());
-            film.setMpa(mpa);
-        }
-        log.info("Добавлены лайки с списку фильмов");
     }
 
     private void addGenresToFilms(List<Film> films) {
@@ -163,18 +152,15 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film getFilmById(Integer id) {
         try {
-            String query = "select * from films where film_id = ?";
+            String query = "SELECT m.name AS mpa_name, f.film_id, f.name, f.description, f.release_date, f.duration, " +
+                    "f.mpa_id FROM films AS f INNER JOIN mpa AS m ON f.mpa_id = m.mpa_id WHERE f.film_id = ?";
             Film film = jdbcTemplate.queryForObject(query, new MakeFilm(), id);
-
-            String queryMpa = "select * from mpa where mpa_id IN (select mpa_id from films where film_id = ?)";
-            Mpa mpa = jdbcTemplate.queryForObject(queryMpa, new MakeMpa(), id);
-            assert film != null;
-            film.setMpa(mpa);
 
             String queryGenres = "select * from genre where genre_id IN (select genre_id from film_genre where film_id = ?)";
             List<Genre> genres = jdbcTemplate.query(queryGenres, new MakeGenre(), id);
 
             Set<Genre> set = new HashSet<>(genres);
+            assert film != null;
             film.setGenres(set);
 
             String queryLikesFilm = "select user_id from likes_film where film_id = ?";

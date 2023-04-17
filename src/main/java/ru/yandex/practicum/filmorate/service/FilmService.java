@@ -59,7 +59,7 @@ public class FilmService {
             log.warn("Ошибка получения фильма с id={}", id);
             NotFoundException.throwException("Ошибка получения фильма", id);
         }
-        return filmDbStorage.getFilmById(id);
+        return filmCheck;
     }
 
     public Collection<Film> getPopularFilms(Integer count) {
