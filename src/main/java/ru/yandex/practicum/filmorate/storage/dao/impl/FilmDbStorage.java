@@ -121,7 +121,7 @@ public class FilmDbStorage implements FilmStorage {
     public Collection<Film> findAllFilms() {
         String query = "SELECT m.name AS mpa_name, m.mpa_id, f.film_id, f.name, f.description, f.release_date, f.duration, " +
                 "f.mpa_id FROM films AS f INNER JOIN mpa AS m ON f.mpa_id = m.mpa_id";
-        List <Film> films = jdbcTemplate.query(query, new MakeFilm());
+        List<Film> films = jdbcTemplate.query(query, new MakeFilm());
         addLikesToFilms(films);
         addGenresToFilms(films);
         log.info("Получен список фильмов");
