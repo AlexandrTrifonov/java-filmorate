@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage.film;
+package ru.yandex.practicum.filmorate.storage.dao.impl;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,13 +7,15 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.dao.FilmStorage;
 
+import java.util.Collection;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
 
     private Integer idFilm = 1;
 
@@ -32,7 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage{
         film.setId(idFilm);
         films.put(film.getId(), film);
         log.info("Добавлен фильм: '{}'", film);
-        this.idFilm ++;
+        this.idFilm++;
         return film;
     }
 
@@ -41,7 +43,6 @@ public class InMemoryFilmStorage implements FilmStorage{
         if (!films.containsKey(film.getId())) {
             log.warn("Фильм с id={} не существует.", film.getId());
             throw new NotFoundException(String.format("Фильм с id=\"%s\" не существует.", film.getId()));
-    //        throw new ValidationException("Фильм с введеным id не существует");
         }
         films.put(film.getId(), film);
         log.info("Обновлен фильм: '{}'", film);
@@ -63,5 +64,20 @@ public class InMemoryFilmStorage implements FilmStorage{
                 break;
             }
         }
+    }
+
+    @Override
+    public Film getFilmById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public Collection<Film> getPopularFilms(Integer count) {
+        return null;
+    }
+
+    @Override
+    public Collection<Film> findAllFilms() {
+        return null;
     }
 }

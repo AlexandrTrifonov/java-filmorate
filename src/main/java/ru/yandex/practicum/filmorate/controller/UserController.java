@@ -8,8 +8,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.*;
 
-import static ru.yandex.practicum.filmorate.validations.ValidateUser.validateUser;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,13 +22,11 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        validateUser(user);
         return userService.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@RequestBody User user) {
-        validateUser(user);
         return userService.updateUser(user);
     }
 
@@ -45,13 +41,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
-        return userService.addFriendUser(userId, friendId);
+    public void addFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
+        userService.addFriendUser(userId, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
-        return userService.deleteFriendUser(userId, friendId);
+    public void deleteFriendUser(@PathVariable (name = "id") Integer userId, @PathVariable Integer friendId) {
+        userService.deleteFriendUser(userId, friendId);
     }
 
     @GetMapping("/{id}/friends")

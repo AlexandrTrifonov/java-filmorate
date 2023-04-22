@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.validations;
+package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Slf4j
 public class ValidateFilm {
 
-    public static void validateFilm (Film film) {
+    public static void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isBlank()) {
             log.warn("Поле название фильма не заполнено");
             throw new ValidationException("Поле название фильма не заполнено");

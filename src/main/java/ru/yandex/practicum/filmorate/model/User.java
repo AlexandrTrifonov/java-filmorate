@@ -1,16 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-@Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Builder
 public class User {
 
     private Integer id;
@@ -18,5 +19,7 @@ public class User {
     private String login;
     private String name;
     private LocalDate birthday;
-    private final Set<Long> friendsUser = new HashSet<>();
+    private Set<Integer> friendsUser = new HashSet<>();
+    private Map<Integer, Boolean> friendship = new HashMap<>();
+
 }

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.validations;
+package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exceptions.*;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Slf4j
 public class ValidateUser {
 
-    public static void validateUser (User user) {
+    public static void validateUser(User user) {
         if (user.getEmail() == null || user.getEmail().isBlank()) {
             log.warn("Поле e-mail не заполнено");
             throw new ValidationException("Поле e-mail не заполнено");
